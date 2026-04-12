@@ -51,15 +51,22 @@
         
         <div class="row" style="margin-top:15px;">
             <div class="col">
-                <label>Total Round Trip Miles</label>
+                <label>Round Trip Miles</label>
                 <input type="number" id="miles" placeholder="0" oninput="calcFuel()">
             </div>
             <div class="col">
-                <label>Fuel Cost ($)</label>
-                <input type="number" id="calcTripCost" readonly style="background:#eee;">
+                <label>Price Per Gal ($)</label>
+                <input type="number" id="pricePerGal" value="4.00" oninput="calcFuel()">
             </div>
         </div>
-        <div class="note">Auto-calc: Total Miles ÷ 8 mpg × $4.00</div>
+        
+        <div class="row">
+            <div class="col">
+                <label>Fuel Cost ($)</label>
+                <input type="number" id="calcTripCost" readonly style="background:#eee; font-weight:bold; color:#c62828;">
+            </div>
+        </div>
+        <div class="note">Auto-calc: Total Miles ÷ 8 mpg × Price Per Gal</div>
     </div>
 
     <label>Job Revenue</label>
@@ -136,7 +143,9 @@
 
     function calcFuel() {
         var miles = parseFloat(document.getElementById('miles').value) || 0;
-        var cost = (miles / 8) * 4.00;
+        var ppg = parseFloat(document.getElementById('pricePerGal').value) || 4.00;
+        
+        var cost = (miles / 8) * ppg;
         document.getElementById('calcTripCost').value = cost.toFixed(2);
         document.getElementById('finalFuel').value = cost.toFixed(2);
     }
@@ -151,7 +160,6 @@
         var gross = (linft * pricePerFt) + miscRev;
         
         var fuel = val('finalFuel');
-        // Combined regular labor + the new sealing labor field
         var labor = val('l1') + val('l2') + val('l3') + val('l4') + val('l5') + val('lSeal');
         var costMat = linft * val('cMatPerFt');
         var overhead = val('misc');
